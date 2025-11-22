@@ -481,10 +481,10 @@ class _BillFormScreenState extends State<BillFormScreen> {
                             pw.CrossAxisAlignment.start, // Align items to top
                         children: [
                           pw.Text(
-                            'Address:',
+                            'Address    :',
                             style: pw.TextStyle(
                               fontSize: 10,
-                              fontWeight: pw.FontWeight.bold,
+                              fontWeight: pw.FontWeight.normal,
                             ),
                           ),
                           pw.SizedBox(width: 5),
@@ -755,7 +755,7 @@ class _BillFormScreenState extends State<BillFormScreen> {
 
                       child: pw.Table(
                         border: pw.TableBorder.all(
-                          color: PdfColors.grey300,
+                          color: PdfColors.grey400,
                           width: 1,
                         ),
                         columnWidths: {
