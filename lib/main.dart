@@ -308,20 +308,33 @@ class _BillFormScreenState extends State<BillFormScreen> {
     String currentDate =
         '${DateTime.now().day} ${_getMonthName(DateTime.now().month)} ${DateTime.now().year}';
 
+    final a4NoMargin = PdfPageFormat(
+      PdfPageFormat.a4.width,
+      PdfPageFormat.a4.height,
+      marginLeft: 20,
+      marginTop: 20,
+      marginRight: 20,
+      marginBottom: 20,
+    );
+
     pdf.addPage(
       pw.Page(
-        pageFormat: PdfPageFormat.a4,
+        pageFormat: a4NoMargin,
         build: (pw.Context context) {
           return pw.Container(
             decoration: pw.BoxDecoration(border: pw.Border.all()),
+
             child: pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
-                pw.Text(
-                  'GSTIN: 32BSGPJ3340H174',
-                  style: pw.TextStyle(
-                    fontSize: 8,
-                    fontWeight: pw.FontWeight.bold,
+                pw.Container(
+                  padding: pw.EdgeInsets.all(10),
+                  child: pw.Text(
+                    'GSTIN: 32BSGPJ3340H174',
+                    style: pw.TextStyle(
+                      fontSize: 10,
+                      fontWeight: pw.FontWeight.bold,
+                    ),
                   ),
                 ),
                 // Header with Logo and GSTIN
@@ -332,39 +345,43 @@ class _BillFormScreenState extends State<BillFormScreen> {
                     // Logo
                     if (_logoImage != null)
                       pw.Container(
-                        height: 100,
+                        // height: 100,
                         child: pw.FittedBox(
                           child: pw.Column(
                             children: [
                               pw.Container(
-                                height: 22, // Fixed height for image
+                                height: 40, // Fixed height for image
                                 child: pw.Image(pw.MemoryImage(_logoImage!)),
                               ),
+                              pw.SizedBox(height: 2),
                               pw.Text(
                                 "3way junction Peringottukara",
                                 style: pw.TextStyle(
-                                  fontSize: 4,
+                                  fontSize: 10,
                                   fontWeight: pw.FontWeight.normal,
                                 ),
                               ),
+                              pw.SizedBox(height: 2),
                               pw.Text(
                                 "Mob:9072430483,834830868",
                                 style: pw.TextStyle(
-                                  fontSize: 4,
+                                  fontSize: 10,
                                   fontWeight: pw.FontWeight.normal,
                                 ),
                               ),
+                              pw.SizedBox(height: 2),
                               pw.Text(
                                 "Mobile house",
                                 style: pw.TextStyle(
-                                  fontSize: 4,
+                                  fontSize: 10,
                                   fontWeight: pw.FontWeight.normal,
                                 ),
                               ),
+                              pw.SizedBox(height: 2),
                               pw.Text(
                                 "GST TAX INVOICE (TYPE-B2C) -CASH SALE",
                                 style: pw.TextStyle(
-                                  fontSize: 4,
+                                  fontSize: 8,
                                   fontWeight: pw.FontWeight.normal,
                                 ),
                               ),
@@ -407,6 +424,7 @@ class _BillFormScreenState extends State<BillFormScreen> {
                               fontSize: 8,
                             ),
                           ),
+                          pw.SizedBox(height: 2),
                           pw.Text(
                             'STATE CODE : 32',
                             style: pw.TextStyle(
@@ -426,6 +444,7 @@ class _BillFormScreenState extends State<BillFormScreen> {
                               fontSize: 8,
                             ),
                           ),
+                          pw.SizedBox(height: 2),
                           pw.Text(
                             'Invoice Date : $currentDate',
                             style: pw.TextStyle(
@@ -439,7 +458,7 @@ class _BillFormScreenState extends State<BillFormScreen> {
                   ),
                 ),
 
-                pw.SizedBox(height: 15),
+                pw.SizedBox(height: 5),
                 pw.Container(
                   height: .5, // Line thickness
                   width: double.infinity, // Full width
@@ -464,18 +483,19 @@ class _BillFormScreenState extends State<BillFormScreen> {
                       ),
                       pw.SizedBox(height: 5),
                       pw.Text(
-                        'Address: ${addressController.text.isNotEmpty ? addressController.text : ""}',
+                        'Address    :  ${addressController.text.isNotEmpty ? addressController.text : ""}',
                         style: pw.TextStyle(fontSize: 10),
                       ),
+                      pw.SizedBox(height: 2),
                       pw.Text(
-                        'Mobile Tel : ${mobileNumberController.text.isNotEmpty ? mobileNumberController.text : ""}',
+                        'Mobile Tel :  ${mobileNumberController.text.isNotEmpty ? mobileNumberController.text : ""}',
                         style: pw.TextStyle(fontSize: 10),
                       ),
                     ],
                   ),
                 ),
 
-                pw.SizedBox(height: 15),
+                pw.SizedBox(height: 5),
 
                 // Table
                 pw.Table(
@@ -511,7 +531,11 @@ class _BillFormScreenState extends State<BillFormScreen> {
                     // Product Row - USING DYNAMIC VALUES
                     pw.TableRow(
                       children: [
-                        _buildTableCell('1', alignment: pw.Alignment.center),
+                        _buildTableCell(
+                          '1',
+                          alignment: pw.Alignment.center,
+                          table: 'mainTable',
+                        ),
                         pw.Container(
                           // Wrap the Padding with Container for alignment
                           alignment: pw.Alignment.center,
@@ -530,7 +554,7 @@ class _BillFormScreenState extends State<BillFormScreen> {
                                       ? phoneModelController.text
                                       : "",
                                   style: pw.TextStyle(
-                                    fontSize: 10,
+                                    fontSize: 11,
                                     fontWeight: pw.FontWeight.bold,
                                   ),
                                   textAlign: pw.TextAlign.center, // Center text
@@ -538,42 +562,58 @@ class _BillFormScreenState extends State<BillFormScreen> {
                                 pw.SizedBox(height: 2),
                                 pw.Text(
                                   'IMEI1: ${imei1Controller.text.isNotEmpty ? imei1Controller.text : ""}',
-                                  style: pw.TextStyle(fontSize: 8),
+                                  style: pw.TextStyle(fontSize: 9),
                                   textAlign: pw.TextAlign.center, // Center text
                                 ),
                                 pw.Text(
                                   'IMEI2: ${imei2Controller.text.isNotEmpty ? imei2Controller.text : ""}',
-                                  style: pw.TextStyle(fontSize: 8),
+                                  style: pw.TextStyle(fontSize: 9),
                                   textAlign: pw.TextAlign.center, // Center text
                                 ),
                               ],
                             ),
                           ),
                         ),
-                        _buildTableCell('', alignment: pw.Alignment.center),
-                        _buildTableCell('1', alignment: pw.Alignment.center),
+                        _buildTableCell(
+                          '',
+                          alignment: pw.Alignment.center,
+                          table: 'mainTable',
+                        ),
+                        _buildTableCell(
+                          '1',
+                          alignment: pw.Alignment.center,
+                          table: 'mainTable',
+                        ),
                         _buildTableCell(
                           taxableAmountController.text.isNotEmpty
                               ? taxableAmountController.text
                               : "",
                           alignment: pw.Alignment.center,
+                          table: 'mainTable',
                         ),
-                        _buildTableCell('0.00', alignment: pw.Alignment.center),
+                        _buildTableCell(
+                          '0.00',
+                          alignment: pw.Alignment.center,
+                          table: 'mainTable',
+                        ),
                         _buildTableCell(
                           '18',
                           alignment: pw.Alignment.center,
+                          table: 'mainTable',
                         ), // Fixed GST 18%
                         _buildTableCell(
                           gstAmountController.text.isNotEmpty
                               ? gstAmountController.text
                               : "",
                           alignment: pw.Alignment.center,
+                          table: 'mainTable',
                         ),
                         _buildTableCell(
                           totalAmountController.text.isNotEmpty
                               ? totalAmountController.text
                               : "",
                           alignment: pw.Alignment.center,
+                          table: 'mainTable',
                         ),
                       ],
                     ),
@@ -581,17 +621,17 @@ class _BillFormScreenState extends State<BillFormScreen> {
                 ),
 
                 pw.SizedBox(
-                  height: 220,
+                  height: 300,
                   child: pw.Stack(
                     // Add Stack as parent of Positioned
                     children: [
                       pw.Positioned(
                         bottom: 10, // From bottom of Stack
-                        right: 20, // From right of Stack
-                        child: _sealImage != null
+                        right: 30, // From right of Stack
+                        child: _sealImage != null && _sealChecked
                             ? pw.Container(
-                                width: 80,
-                                height: 80,
+                                width: 120,
+                                height: 120,
                                 child: pw.Transform.rotate(
                                   angle:
                                       35 *
@@ -600,27 +640,7 @@ class _BillFormScreenState extends State<BillFormScreen> {
                                   child: pw.Image(pw.MemoryImage(_sealImage!)),
                                 ),
                               )
-                            : pw.Container(
-                                width: 80,
-                                height: 80,
-                                decoration: pw.BoxDecoration(
-                                  shape: pw.BoxShape.circle,
-                                  border: pw.Border.all(
-                                    color: PdfColors.red,
-                                    width: 2,
-                                  ),
-                                ),
-                                child: pw.Center(
-                                  child: pw.Text(
-                                    'SEAL',
-                                    style: pw.TextStyle(
-                                      color: PdfColors.red,
-                                      fontWeight: pw.FontWeight.bold,
-                                      fontSize: 10,
-                                    ),
-                                  ),
-                                ),
-                              ),
+                            : pw.Container(child: pw.Center()),
                       ),
                     ],
                   ),
@@ -640,7 +660,7 @@ class _BillFormScreenState extends State<BillFormScreen> {
                       ),
 
                       pw.Text(
-                        '1    ${taxableAmountController.text.isNotEmpty ? taxableAmountController.text : ""}',
+                        '    ${totalAmountController.text.isNotEmpty ? totalAmountController.text : ""}.00',
                         style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
                       ),
                     ],
@@ -648,7 +668,6 @@ class _BillFormScreenState extends State<BillFormScreen> {
                 ),
 
                 pw.SizedBox(height: 2),
-                pw.Divider(color: PdfColors.grey400, thickness: 1),
 
                 // Amount in Words - DYNAMIC
                 pw.Row(
@@ -664,24 +683,16 @@ class _BillFormScreenState extends State<BillFormScreen> {
                         ),
                       ),
                     ),
-                    pw.Column(
-                      mainAxisAlignment: pw.MainAxisAlignment.end,
-                      children: [
-                        pw.Text(
-                          "rounding",
-                          style: pw.TextStyle(
-                            fontSize: 8,
-                            fontStyle: pw.FontStyle.italic,
-                          ),
+
+                    pw.Container(
+                      padding: pw.EdgeInsets.all(8),
+                      child: pw.Text(
+                        'Total Amount: ${totalAmountController.text}.00',
+                        style: pw.TextStyle(
+                          fontSize: 8,
+                          fontStyle: pw.FontStyle.italic,
                         ),
-                        pw.Text(
-                          'Total Amount: ${totalAmountController.text}',
-                          style: pw.TextStyle(
-                            fontSize: 8,
-                            fontStyle: pw.FontStyle.italic,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ],
                 ),
@@ -726,8 +737,8 @@ class _BillFormScreenState extends State<BillFormScreen> {
                               _buildTableCell('0.00'),
                               _buildTableCell('0.00'),
                               _buildTableCell(
-                                taxableAmountController.text.isNotEmpty
-                                    ? taxableAmountController.text
+                                gstAmountController.text.isNotEmpty
+                                    ? gstAmountController.text
                                     : "0.00",
                               ),
                               _buildTableCell('0.00'),
@@ -773,50 +784,61 @@ class _BillFormScreenState extends State<BillFormScreen> {
                     pw.SizedBox(width: 20),
 
                     // Footer with Seal and Signature - Right side
-                    pw.Expanded(
-                      flex: 1, // Takes 1/3 of the width
-                      child: pw.Column(
-                        crossAxisAlignment: pw.CrossAxisAlignment.end,
-                        mainAxisAlignment: pw.MainAxisAlignment.start,
-                        children: [
-                          // Seal at the top
-                          pw.SizedBox(height: 10),
+                    pw.Container(
+                      padding: pw.EdgeInsets.all(8),
+                      child: pw.Expanded(
+                        flex: 1, // Takes 1/3 of the width
+                        child: pw.Column(
+                          crossAxisAlignment: pw.CrossAxisAlignment.end,
+                          mainAxisAlignment: pw.MainAxisAlignment.start,
+                          children: [
+                            // Seal at the top
+                            pw.SizedBox(height: 10),
 
-                          // Signature Section
-                          pw.Column(
-                            crossAxisAlignment: pw.CrossAxisAlignment.end,
-                            children: [
-                              pw.Text(
-                                'Certified that the particulars given above are true and correct',
-                                style: pw.TextStyle(
-                                  fontSize: 8,
-                                  fontStyle: pw.FontStyle.italic,
+                            // Signature Section
+                            pw.Column(
+                              crossAxisAlignment: pw.CrossAxisAlignment.end,
+                              children: [
+                                pw.Text(
+                                  'Certified that the particulars given ',
+                                  style: pw.TextStyle(
+                                    fontSize: 8,
+                                    fontStyle: pw.FontStyle.italic,
+                                  ),
+                                  textAlign: pw.TextAlign.right,
                                 ),
-                                textAlign: pw.TextAlign.right,
-                              ),
-                              pw.SizedBox(height: 20),
-                              pw.Text(
-                                'For MOBILE HOUSE',
-                                style: pw.TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: pw.FontWeight.bold,
+                                pw.Text(
+                                  ' above are true and correct',
+                                  style: pw.TextStyle(
+                                    fontSize: 8,
+                                    fontStyle: pw.FontStyle.italic,
+                                  ),
+                                  textAlign: pw.TextAlign.right,
                                 ),
-                              ),
-                              pw.SizedBox(height: 10),
-                              pw.Container(
-                                width: 150,
-                                child: pw.Divider(
-                                  color: PdfColors.black,
-                                  thickness: 1,
+                                pw.SizedBox(height: 20),
+                                pw.Text(
+                                  'For MOBILE HOUSE',
+                                  style: pw.TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: pw.FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                              pw.Text(
-                                'Authorised Signatory',
-                                style: pw.TextStyle(fontSize: 10),
-                              ),
-                            ],
-                          ),
-                        ],
+                                pw.SizedBox(height: 10),
+                                pw.Container(
+                                  width: 150,
+                                  child: pw.Divider(
+                                    color: PdfColors.black,
+                                    thickness: 1,
+                                  ),
+                                ),
+                                pw.Text(
+                                  'Authorised Signatory',
+                                  style: pw.TextStyle(fontSize: 10),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -863,12 +885,14 @@ class _BillFormScreenState extends State<BillFormScreen> {
   pw.Widget _buildTableCell(
     String text, {
     pw.Alignment alignment = pw.Alignment.centerLeft,
+    table,
   }) {
     return pw.Container(
       padding: pw.EdgeInsets.all(4),
+      margin: pw.EdgeInsets.only(top: table == "mainTable" ? 10 : 0),
       child: pw.Text(
         text,
-        style: pw.TextStyle(fontSize: 8),
+        style: pw.TextStyle(fontSize: 10),
         textAlign: alignment == pw.Alignment.centerLeft
             ? pw.TextAlign.left
             : alignment == pw.Alignment.center
@@ -1167,23 +1191,6 @@ class _BillFormScreenState extends State<BillFormScreen> {
               ],
             ),
             SizedBox(height: 8),
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    'Taxable Amount: ${taxableAmountController.text.isEmpty ? "0.00" : taxableAmountController.text}',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    'GST Amount: ${gstAmountController.text.isEmpty ? "0.00" : gstAmountController.text}',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 16),
 
             Container(
               padding: EdgeInsets.symmetric(vertical: 8),
@@ -1224,7 +1231,6 @@ class _BillFormScreenState extends State<BillFormScreen> {
                     ),
                   ),
                   SizedBox(width: 8),
-                  Text('□', style: TextStyle(fontSize: 18)),
                 ],
               ),
             ),
@@ -1235,39 +1241,44 @@ class _BillFormScreenState extends State<BillFormScreen> {
   }
 
   Widget _buildActionButtons() {
-    return Row(
+    return Column(
       children: [
-        Expanded(
-          child: ElevatedButton.icon(
-            onPressed: _viewBill,
-            icon: Icon(Icons.visibility, size: 20),
-            label: Text('View Bill', style: TextStyle(fontSize: 16)),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green,
-              foregroundColor: Colors.white,
-              padding: EdgeInsets.symmetric(vertical: 15),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+        Row(
+          children: [
+            Expanded(
+              child: ElevatedButton.icon(
+                onPressed: _viewBill,
+                icon: Icon(Icons.visibility, size: 20),
+                label: Text('View Bill', style: TextStyle(fontSize: 16)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  foregroundColor: Colors.white,
+                  padding: EdgeInsets.symmetric(vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-        SizedBox(width: 16),
-        Expanded(
-          child: ElevatedButton.icon(
-            onPressed: _printBill,
-            icon: Icon(Icons.print, size: 20),
-            label: Text('Print', style: TextStyle(fontSize: 16)),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-              foregroundColor: Colors.white,
-              padding: EdgeInsets.symmetric(vertical: 15),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+            SizedBox(width: 16),
+            Expanded(
+              child: ElevatedButton.icon(
+                onPressed: _printBill,
+                icon: Icon(Icons.print, size: 20),
+                label: Text('Print', style: TextStyle(fontSize: 16)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  foregroundColor: Colors.white,
+                  padding: EdgeInsets.symmetric(vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
               ),
             ),
-          ),
+          ],
         ),
+        Container(height: 100),
       ],
     );
   }
