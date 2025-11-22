@@ -973,33 +973,122 @@ class _BillFormScreenState extends State<BillFormScreen> {
     );
   }
 
+  // UPDATED SCANNER WITH RED FOCUS LINE
   Widget _buildScanner() {
-    return Column(
+    return Stack(
       children: [
-        AppBar(
-          title: Text('Scan IMEI ${_isScanningIMEI1 ? '1' : '2'} Barcode'),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: _stopScanning,
-          ),
-        ),
-        Expanded(
-          child: MobileScanner(
-            onDetect: _onBarcodeScanned,
-            controller: MobileScannerController(
-              detectionSpeed: DetectionSpeed.normal,
-              facing: CameraFacing.back,
+        Column(
+          children: [
+            AppBar(
+              title: Text('Scan IMEI ${_isScanningIMEI1 ? '1' : '2'} Barcode'),
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: _stopScanning,
+              ),
+              backgroundColor: Colors.black87,
             ),
-          ),
+            Expanded(
+              child: Stack(
+                children: [
+                  MobileScanner(
+                    onDetect: _onBarcodeScanned,
+                    controller: MobileScannerController(
+                      detectionSpeed: DetectionSpeed.normal,
+                      facing: CameraFacing.back,
+                      torchEnabled: false,
+                    ),
+                  ),
+
+                  // Red focus line overlay
+                  Positioned(
+                    top: MediaQuery.of(context).size.height * 0.4,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      height: 2,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.transparent,
+                            Colors.red,
+                            Colors.transparent,
+                          ],
+                          stops: [0.1, 0.5, 0.9],
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.red.withOpacity(0.8),
+                            blurRadius: 8,
+                            spreadRadius: 2,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // Scanning area border
+                  Positioned(
+                    top: MediaQuery.of(context).size.height * 0.35,
+                    left: MediaQuery.of(context).size.width * 0.1,
+                    right: MediaQuery.of(context).size.width * 0.1,
+                    bottom: MediaQuery.of(context).size.height * 0.35,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.red.withOpacity(0.6),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+
+                  // Instructions
+                  Positioned(
+                    top: MediaQuery.of(context).size.height * 0.28,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      padding: EdgeInsets.all(16),
+                      child: Text(
+                        'Align barcode within the frame',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          shadows: [
+                            Shadow(
+                              blurRadius: 4,
+                              color: Colors.black,
+                              offset: Offset(1, 1),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(16),
+              color: Colors.black,
+              child: Text(
+                'Position the IMEI barcode within the frame to scan',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
         ),
-        Container(
-          padding: EdgeInsets.all(16),
-          color: Colors.black,
-          child: Text(
-            'Position the IMEI barcode within the frame to scan',
-            style: TextStyle(color: Colors.white, fontSize: 16),
-            textAlign: TextAlign.center,
-          ),
+
+        // Animated scanning line
+        Positioned(
+          top: MediaQuery.of(context).size.height * 0.35,
+          left: MediaQuery.of(context).size.width * 0.1,
+          right: MediaQuery.of(context).size.width * 0.1,
+          child: _ScanningLine(),
         ),
       ],
     );
@@ -1297,4 +1386,77 @@ class _BillFormScreenState extends State<BillFormScreen> {
     gstAmountController.dispose();
     super.dispose();
   }
+}
+
+// Animated scanning line widget
+class _ScanningLine extends StatefulWidget {
+  @override
+  __ScanningLineState createState() => __ScanningLineState();
+}
+
+class __ScanningLineState extends State<_ScanningLine>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: Duration(milliseconds: 1500),
+      vsync: this,
+    )..repeat(reverse: true);
+
+    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return CustomPaint(
+          size: Size(MediaQuery.of(context).size.width * 0.8, 200),
+          painter: ScanningLinePainter(_animation.value),
+        );
+      },
+    );
+  }
+}
+
+class ScanningLinePainter extends CustomPainter {
+  final double animationValue;
+
+  ScanningLinePainter(this.animationValue);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.red
+      ..strokeWidth = 3
+      ..style = PaintingStyle.stroke;
+
+    final path = Path()
+      ..moveTo(0, size.height * animationValue)
+      ..lineTo(size.width, size.height * animationValue);
+
+    canvas.drawPath(path, paint);
+
+    // Add glow effect
+    final glowPaint = Paint()
+      ..color = Colors.red.withOpacity(0.3)
+      ..strokeWidth = 8
+      ..maskFilter = MaskFilter.blur(BlurStyle.normal, 4);
+
+    canvas.drawPath(path, glowPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
