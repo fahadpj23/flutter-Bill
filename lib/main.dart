@@ -330,7 +330,7 @@ class _BillFormScreenState extends State<BillFormScreen> {
                 pw.Container(
                   padding: pw.EdgeInsets.all(10),
                   child: pw.Text(
-                    'GSTIN: 32BSGPJ3340H174',
+                    'GSTIN: 32BSGPJ3340H1Z4',
                     style: pw.TextStyle(
                       fontSize: 10,
                       fontWeight: pw.FontWeight.bold,
@@ -404,7 +404,7 @@ class _BillFormScreenState extends State<BillFormScreen> {
                 ),
 
                 pw.SizedBox(height: 2),
-                pw.Divider(color: PdfColors.black, thickness: 1),
+
                 // State and Invoice Details
                 pw.Container(
                   decoration: pw.BoxDecoration(
@@ -476,9 +476,29 @@ class _BillFormScreenState extends State<BillFormScreen> {
                         ),
                       ),
                       pw.SizedBox(height: 5),
-                      pw.Text(
-                        'Address    :  ${addressController.text.isNotEmpty ? addressController.text : ""}',
-                        style: pw.TextStyle(fontSize: 10),
+                      pw.Row(
+                        crossAxisAlignment:
+                            pw.CrossAxisAlignment.start, // Align items to top
+                        children: [
+                          pw.Text(
+                            'Address:',
+                            style: pw.TextStyle(
+                              fontSize: 10,
+                              fontWeight: pw.FontWeight.bold,
+                            ),
+                          ),
+                          pw.SizedBox(width: 5),
+                          pw.Expanded(
+                            child: pw.Text(
+                              addressController.text.isNotEmpty
+                                  ? addressController.text
+                                  : "",
+                              style: pw.TextStyle(fontSize: 10),
+                              softWrap: true,
+                              maxLines: null,
+                            ),
+                          ),
+                        ],
                       ),
                       pw.SizedBox(height: 2),
                       pw.Text(
@@ -548,7 +568,7 @@ class _BillFormScreenState extends State<BillFormScreen> {
                                       ? phoneModelController.text
                                       : "",
                                   style: pw.TextStyle(
-                                    fontSize: 11,
+                                    fontSize: 10,
                                     fontWeight: pw.FontWeight.bold,
                                   ),
                                   textAlign: pw.TextAlign.center, // Center text
