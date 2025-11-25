@@ -353,7 +353,7 @@ class _BillFormScreenState extends State<BillFormScreen> {
                                 height: 40, // Fixed height for image
                                 child: pw.Image(pw.MemoryImage(_logoImage!)),
                               ),
-                              pw.SizedBox(height: 2),
+                              pw.SizedBox(height: 3),
                               pw.Text(
                                 "3way junction Peringottukara",
                                 style: pw.TextStyle(
@@ -361,15 +361,15 @@ class _BillFormScreenState extends State<BillFormScreen> {
                                   fontWeight: pw.FontWeight.normal,
                                 ),
                               ),
-                              pw.SizedBox(height: 2),
+                              pw.SizedBox(height: 3),
                               pw.Text(
-                                "Mob:9072430483,834830868",
+                                "Mob:9072430483,8304830868",
                                 style: pw.TextStyle(
                                   fontSize: 10,
                                   fontWeight: pw.FontWeight.normal,
                                 ),
                               ),
-                              pw.SizedBox(height: 2),
+                              pw.SizedBox(height: 3),
                               pw.Text(
                                 "Mobile house",
                                 style: pw.TextStyle(
@@ -377,7 +377,7 @@ class _BillFormScreenState extends State<BillFormScreen> {
                                   fontWeight: pw.FontWeight.normal,
                                 ),
                               ),
-                              pw.SizedBox(height: 2),
+                              pw.SizedBox(height: 3),
                               pw.Text(
                                 "GST TAX INVOICE (TYPE-B2C) -CASH SALE",
                                 style: pw.TextStyle(
@@ -410,7 +410,7 @@ class _BillFormScreenState extends State<BillFormScreen> {
                   decoration: pw.BoxDecoration(
                     borderRadius: pw.BorderRadius.circular(5),
                   ),
-                  padding: pw.EdgeInsets.all(10),
+                  padding: pw.EdgeInsets.all(5),
                   child: pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                     children: [
@@ -426,7 +426,7 @@ class _BillFormScreenState extends State<BillFormScreen> {
                           ),
                           pw.SizedBox(height: 3),
                           pw.Text(
-                            'STATE CODE : 32',
+                            'Invoice No. : MH-${billNoController.text.isNotEmpty ? billNoController.text : ""}',
                             style: pw.TextStyle(
                               fontWeight: pw.FontWeight.bold,
                               fontSize: 9,
@@ -438,7 +438,7 @@ class _BillFormScreenState extends State<BillFormScreen> {
                         crossAxisAlignment: pw.CrossAxisAlignment.end,
                         children: [
                           pw.Text(
-                            'Invoice No. : ${billNoController.text.isNotEmpty ? billNoController.text : ""}',
+                            'STATE CODE : 32',
                             style: pw.TextStyle(
                               fontWeight: pw.FontWeight.bold,
                               fontSize: 9,
@@ -463,13 +463,13 @@ class _BillFormScreenState extends State<BillFormScreen> {
                 // Customer Details
                 pw.Container(
                   width: double.infinity,
-                  padding: pw.EdgeInsets.all(10),
+                  padding: pw.EdgeInsets.all(5),
 
                   child: pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
                       pw.Text(
-                        'Customer : ${customerNameController.text.isNotEmpty ? customerNameController.text : ""}',
+                        'Customer  : ${customerNameController.text.isNotEmpty ? customerNameController.text : ""}',
                         style: pw.TextStyle(
                           fontWeight: pw.FontWeight.bold,
                           fontSize: 10,
@@ -481,7 +481,7 @@ class _BillFormScreenState extends State<BillFormScreen> {
                             pw.CrossAxisAlignment.start, // Align items to top
                         children: [
                           pw.Text(
-                            'Address    :',
+                            'Address     :',
                             style: pw.TextStyle(
                               fontSize: 10,
                               fontWeight: pw.FontWeight.normal,
@@ -500,9 +500,9 @@ class _BillFormScreenState extends State<BillFormScreen> {
                           ),
                         ],
                       ),
-                      pw.SizedBox(height: 2),
+                      pw.SizedBox(height: 5),
                       pw.Text(
-                        'Mobile Tel :  ${mobileNumberController.text.isNotEmpty ? mobileNumberController.text : ""}',
+                        'Mobile Tel  :  ${mobileNumberController.text.isNotEmpty ? mobileNumberController.text : ""}',
                         style: pw.TextStyle(fontSize: 10),
                       ),
                     ],
@@ -574,23 +574,27 @@ class _BillFormScreenState extends State<BillFormScreen> {
                                   textAlign: pw.TextAlign.center, // Center text
                                 ),
                                 pw.SizedBox(height: 3),
-                                pw.Text(
-                                  'IMEI1: ${imei1Controller.text.isNotEmpty ? imei1Controller.text : ""}',
-                                  style: pw.TextStyle(
-                                    fontSize: 9,
-                                    fontWeight: pw.FontWeight.normal,
-                                  ),
-                                  textAlign: pw.TextAlign.center, // Center text
-                                ),
+                                imei1Controller.text.isNotEmpty
+                                    ? pw.Text(
+                                        'IMEI1: ${imei1Controller.text}',
+                                        style: pw.TextStyle(
+                                          fontSize: 9,
+                                          fontWeight: pw.FontWeight.normal,
+                                        ),
+                                        textAlign: pw.TextAlign.center,
+                                      )
+                                    : pw.SizedBox(), // or null if supported
                                 pw.SizedBox(height: 2),
-                                pw.Text(
-                                  'IMEI2: ${imei2Controller.text.isNotEmpty ? imei2Controller.text : ""}',
-                                  style: pw.TextStyle(
-                                    fontSize: 9,
-                                    fontWeight: pw.FontWeight.normal,
-                                  ),
-                                  textAlign: pw.TextAlign.center, // Center text
-                                ),
+                                imei2Controller.text.isNotEmpty
+                                    ? pw.Text(
+                                        'IMEI2: ${imei2Controller.text}',
+                                        style: pw.TextStyle(
+                                          fontSize: 9,
+                                          fontWeight: pw.FontWeight.normal,
+                                        ),
+                                        textAlign: pw.TextAlign.center,
+                                      )
+                                    : pw.SizedBox(), // or null if supported
                               ],
                             ),
                           ),
@@ -631,8 +635,8 @@ class _BillFormScreenState extends State<BillFormScreen> {
                         ),
                         _buildTableCell(
                           totalAmountController.text.isNotEmpty
-                              ? totalAmountController.text
-                              : "",
+                              ? '${totalAmountController.text}.00'
+                              : '0.00', // or whatever default you prefer
                           alignment: pw.Alignment.center,
                           table: 'mainTable',
                         ),
@@ -642,7 +646,7 @@ class _BillFormScreenState extends State<BillFormScreen> {
                 ),
 
                 pw.SizedBox(
-                  height: 260,
+                  height: 310,
                   child: pw.Stack(
                     // Add Stack as parent of Positioned
                     children: [
@@ -677,35 +681,35 @@ class _BillFormScreenState extends State<BillFormScreen> {
                       pw.Text(
                         'Total',
                         style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.normal,
+                          fontWeight: pw.FontWeight.bold,
                           fontSize: 10,
                         ),
                       ),
                       pw.Text(
                         '   1',
                         style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.normal,
+                          fontWeight: pw.FontWeight.bold,
                           fontSize: 10,
                         ),
                       ),
                       pw.Text(
                         '    ${taxableAmountController.text.isNotEmpty ? taxableAmountController.text : ""}',
                         style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.normal,
+                          fontWeight: pw.FontWeight.bold,
                           fontSize: 10,
                         ),
                       ),
                       pw.Text(
                         '    ${gstAmountController.text.isNotEmpty ? gstAmountController.text : ""}',
                         style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.normal,
+                          fontWeight: pw.FontWeight.bold,
                           fontSize: 10,
                         ),
                       ),
                       pw.Text(
                         '    ${totalAmountController.text.isNotEmpty ? totalAmountController.text : ""}.00',
                         style: pw.TextStyle(
-                          fontWeight: pw.FontWeight.normal,
+                          fontWeight: pw.FontWeight.bold,
                           fontSize: 10,
                         ),
                       ),
@@ -735,8 +739,9 @@ class _BillFormScreenState extends State<BillFormScreen> {
                       child: pw.Text(
                         'Total Amount: ${totalAmountController.text}.00',
                         style: pw.TextStyle(
-                          fontSize: 8,
+                          fontSize: 9,
                           fontStyle: pw.FontStyle.italic,
+                          fontWeight: pw.FontWeight.bold,
                         ),
                       ),
                     ),
